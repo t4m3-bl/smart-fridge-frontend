@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const apiOrigin = process.env.API_ORIGIN?.replace(/\/+$/, "");
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: "standalone",
   cacheComponents: true,
   partialPrefetching: true,
   experimental: {
