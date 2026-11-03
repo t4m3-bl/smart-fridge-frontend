@@ -1,6 +1,6 @@
 ﻿import { ApiError } from "@/shared/api/api-error";
 import type { Problem } from "@/features/auth/model/auth-types";
-import {DEFAULT_API_URL} from "@/shared/config/constants";
+import { API_BASE_PATH } from "@/shared/config/constants";
 
 export type JsonRequestInit = Omit<RequestInit, "body"> & {
   body?: unknown;
@@ -32,12 +32,14 @@ function mergeHeaders(initHeaders: HeadersInit | undefined, hasBody: boolean) {
 async function parseProblem(response: Response): Promise<Problem | undefined> {
   const contentType = response.headers.get("content-type") || "";
 
-  if (!contentType.includes("application/problem+json")) {
+  if (!contentType.includes("json")) {
     return undefined;
   }
 
   try {
-    return (await response.json()) as Problem;
+    const body: unknown = await response.json();
+
+    return isProblemLike(body) ? body : undefined;
   } catch {
     return undefined;
   }
@@ -58,8 +60,8 @@ async function parseResponse<T>(response: Response): Promise<T> {
 }
 
 function buildUrl(path: string) {
-  const normalizedPath = path.startsWith("/") ? path.slice(1) : path;
-  return `${DEFAULT_API_URL}/${normalizedPath}`;
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return `${API_BASE_PATH}${normalizedPath}`;
 }
 
 async function requestInternal<T>(path: string, init: JsonRequestInit = {}) {
@@ -79,7 +81,7 @@ async function requestInternal<T>(path: string, init: JsonRequestInit = {}) {
 
   if (!response.ok) {
     const problem = await parseProblem(response);
-    const message = problem?.detail || problem?.title || response.statusText || "Request failed";
+    const message = problem?.message || response.statusText || "Request failed";
     throw new ApiError(message, response.status, problem);
   }
 
@@ -124,6 +126,9 @@ export async function requestJsonWithAuthRetry<T>(
 }
 
 export function isProblemLike(value: unknown): value is Problem {
-  return isPlainObject(value) && typeof value.title === "string" && typeof value.status === "number";
+  return (
+    isPlainObject(value) &&
+    typeof value.code === "string" &&
+    typeof value.message === "string"
+  );
 }
-

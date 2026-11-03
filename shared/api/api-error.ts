@@ -16,3 +16,7 @@ export function isApiError(error: unknown): error is ApiError {
   return error instanceof ApiError;
 }
 
+export function isNetworkError(error: unknown): boolean {
+  return error instanceof TypeError;
+}
+

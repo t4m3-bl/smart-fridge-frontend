@@ -1,36 +1,47 @@
-﻿export default function FridgePage() {
+﻿"use client";
+
+import { useState } from "react";
+import { useAuthGuard } from "@/features/auth/model/use-auth-guard";
+import { useAuth } from "@/features/auth/model/auth-context";
+import { SessionCheck } from "@/features/auth/ui/session-check";
+import { Button } from "@/shared/ui/button";
+import styles from "./fridge.module.css";
+
+export default function FridgePage() {
+  const isAuthenticated = useAuthGuard();
+  const { isOffline, logout } = useAuth();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+
+    try {
+      await logout();
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
+  if (!isAuthenticated) {
+    return <SessionCheck />;
+  }
+
   return (
-      <main
-          style={{
-            minHeight: "100svh",
-            display: "grid",
-            placeItems: "center",
-            padding: 16,
-          }}
-      >
-        <section
-            style={{
-              width: "100%",
-              maxWidth: 432,
-              background: "rgba(255, 255, 255, 0.66)",
-              border: "1px solid #DCDCD6",
-              borderRadius: 24,
-              padding: 24,
-              display: "flex",
-              flexDirection: "column",
-              gap: 16,
-              boxShadow: "0 16px 48px rgba(28, 29, 26, 0.08)",
-              backdropFilter: "blur(8px)",
-            }}
-        >
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <h1 style={{ margin: 0, fontSize: 32, lineHeight: "38px", fontWeight: 700, letterSpacing: "-0.02em" }}>авторизовались ура</h1>
-            <p style={{ margin: 0, fontSize: 15, lineHeight: "21px", color: "#6B6D66" }}>
-            </p>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          </div>
-        </section>
-      </main>
+    <main className={styles.page}>
+      <section className={styles.card}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>авторизовались ура</h1>
+          {isOffline ? (
+            <p className={styles.offline}>Нет сети — показываем сохранённые данные</p>
+          ) : null}
+        </div>
+
+        <div className={styles.actions}>
+          <Button type="button" variant="primary" onClick={handleLogout} disabled={isLoggingOut}>
+            {isLoggingOut ? "Выходим..." : "Выйти"}
+          </Button>
+        </div>
+      </section>
+    </main>
   );
 }

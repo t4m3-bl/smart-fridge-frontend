@@ -10,11 +10,8 @@ export type TokenResponse = {
 };
 
 export type Problem = {
-  type?: string;
-  title: string;
-  status: number;
-  detail?: string;
-  requestId?: string;
+  code: string;
+  message: string;
 };
 
 export type AuthStatus = "loading" | "authenticated" | "unauthenticated";
@@ -22,6 +19,7 @@ export type AuthStatus = "loading" | "authenticated" | "unauthenticated";
 export type AuthState = {
   status: AuthStatus;
   accessToken: string | null;
+  isOffline: boolean;
 };
 
 export type AuthContextValue = AuthState & {
@@ -31,4 +29,3 @@ export type AuthContextValue = AuthState & {
   refreshSession: () => Promise<string | null>;
   clearSession: () => void;
 };
-

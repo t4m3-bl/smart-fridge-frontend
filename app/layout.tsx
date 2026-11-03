@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Onest } from "next/font/google";
 import "./globals.css";
-import RegisterSW from "@/app/register-sw";
 import { Providers } from "@/app/providers";
 
 const onest = Onest({
@@ -19,9 +18,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ru" className={onest.variable}>
-      <body style={{ minHeight: "100vh", margin: 0, background: "#F5F5F2", color: "#1C1D1A" }}>
+      <body>
         <Providers>
-          <RegisterSW />
           {children}
         </Providers>
       </body>

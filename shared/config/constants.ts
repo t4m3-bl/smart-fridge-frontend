@@ -1,1 +1,1 @@
-﻿export const DEFAULT_API_URL = 'http://localhost:8080/api/v1';
+﻿export const API_BASE_PATH = "/api/v1";

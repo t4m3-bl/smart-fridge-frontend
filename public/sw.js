@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = 'smart-fridge-v1';
+﻿const CACHE_NAME = 'smart-fridge-v2';
 
 const SHELL_ASSETS = [
   '/icon-192.png',

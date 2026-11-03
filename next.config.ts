@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const apiOrigin = process.env.API_ORIGIN?.replace(/\/+$/, "");
+
 const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
@@ -7,13 +9,17 @@ const nextConfig: NextConfig = {
   experimental: {
     agentUpgrade: "security"
   },
-  turbopack: {
-    rules: {
-      "*.css": {
-        loaders: ["@tailwindcss/turbopack"],
-        as: "*.css",
+  async rewrites() {
+    if (!apiOrigin) {
+      return [];
+    }
+
+    return [
+      {
+        source: "/api/v1/:path*",
+        destination: `${apiOrigin}/api/v1/:path*`,
       },
-    },
+    ];
   },
 };
 

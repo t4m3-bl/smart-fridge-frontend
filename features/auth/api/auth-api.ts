@@ -1,6 +1,6 @@
 ﻿import { requestJson } from "@/shared/api/http-client";
 import type { Credentials, TokenResponse } from "../model/auth-types";
-import {DEFAULT_API_URL} from "@/shared/config/constants";
+import { API_BASE_PATH } from "@/shared/config/constants";
 
 export function signUp(credentials: Credentials) {
   return requestJson<TokenResponse>("/auth/sign-up", {
@@ -28,8 +28,4 @@ export function logoutAuth() {
   });
 }
 
-export function startYandexSignIn() {
-  window.location.assign(
-      `${DEFAULT_API_URL}/auth/yandex/sign-in`,
-  );
-}
+export const YANDEX_SIGN_IN_URL = `${API_BASE_PATH}/auth/yandex/sign-in`;

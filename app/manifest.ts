@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'Холодильник',
     short_name: 'Холодильник',
     description: 'Виртуальный холодильник для контроля сроков годности продуктов',
-    start_url: '/',
+    start_url: '/fridge',
     display: 'standalone',
     background_color: '#F5F5F2',
     theme_color: '#F5F5F2',

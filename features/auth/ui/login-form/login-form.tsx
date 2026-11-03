@@ -5,12 +5,14 @@ import { useEffect, useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Button } from "@/shared/ui/button/button";
+import { Button } from "@/shared/ui/button";
 import { getAuthErrorMessage } from "@/features/auth/model/auth-errors";
 import { useAuth } from "@/features/auth/model/auth-context";
 import { credentialsSchema, type CredentialsValues } from "@/features/auth/model/auth-schemas";
-import { loginStyles } from "@/features/auth/ui/login-form/login-form.styles";
-import {startYandexSignIn} from "@/features/auth/api/auth-api";
+import auth from "@/features/auth/ui/auth.module.css";
+import styles from "@/features/auth/ui/login-form/login-form.module.css";
+import { YANDEX_SIGN_IN_URL } from "@/features/auth/api/auth-api";
+import { YandexMark } from "@/features/auth/ui/yandex-mark";
 
 function FridgeLogo() {
   return (
@@ -62,18 +64,12 @@ function EyeOffIcon() {
   );
 }
 
-function YandexMark() {
-  return <span style={loginStyles.yandexDot}>Я</span>;
-}
-
 export function LoginForm() {
   const router = useRouter();
   const { signIn: signInToAccount, status } = useAuth();
   const emailId = useId();
   const passwordId = useId();
   const [showPassword, setShowPassword] = useState(false);
-  const [emailFocused, setEmailFocused] = useState(false);
-  const [passwordFocused, setPasswordFocused] = useState(false);
 
   const {
     register,
@@ -116,29 +112,29 @@ export function LoginForm() {
   });
 
   return (
-    <div style={loginStyles.page}>
-      <div style={loginStyles.inner}>
-        <main style={loginStyles.content}>
-          <section style={loginStyles.card} aria-labelledby="login-title">
-            <div style={loginStyles.logoRow}>
-              <div style={loginStyles.logoBox}>
+    <div className={auth.page}>
+      <div className={auth.inner}>
+        <main className={auth.content}>
+          <section className={auth.card} aria-labelledby="login-title">
+            <div className={styles.logoRow}>
+              <div className={auth.logoBox}>
                 <FridgeLogo />
               </div>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <h1 id="login-title" style={loginStyles.title}>
+            <div className={auth.titleBlock}>
+              <h1 id="login-title" className={auth.title}>
                 Свежо
               </h1>
             </div>
 
-            {status === "loading" ? <p style={loginStyles.helperText}>Проверяем сохранённую сессию…</p> : null}
+            {status === "loading" ? <p className={auth.helperText}>Проверяем сохранённую сессию…</p> : null}
 
-            <form onSubmit={onSubmit} noValidate style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              {errors.root?.message ? <p style={loginStyles.errorSummary}>{errors.root.message}</p> : null}
+            <form onSubmit={onSubmit} noValidate className={auth.formStack}>
+              {errors.root?.message ? <p className={auth.errorSummary}>{errors.root.message}</p> : null}
 
-              <div style={loginStyles.fieldGroup}>
-                <label htmlFor={emailId} style={loginStyles.fieldLabel}>
+              <div className={auth.fieldGroup}>
+                <label htmlFor={emailId} className={auth.fieldLabel}>
                   Email
                 </label>
                 <input
@@ -150,25 +146,20 @@ export function LoginForm() {
                   aria-invalid={Boolean(errors.email)}
                   aria-describedby={errors.email ? `${emailId}-error` : undefined}
                   {...emailField}
-                  onFocus={() => setEmailFocused(true)}
-                  onBlur={(event) => {
-                    setEmailFocused(false);
-                    emailField.onBlur(event);
-                  }}
-                  style={loginStyles.input({ invalid: Boolean(errors.email), focused: emailFocused })}
+                  className={[auth.input, errors.email ? auth.inputInvalid : ""].filter(Boolean).join(" ")}
                 />
                 {errors.email?.message ? (
-                  <p id={`${emailId}-error`} style={loginStyles.errorText}>
+                  <p id={`${emailId}-error`} className={auth.errorText}>
                     {errors.email.message}
                   </p>
                 ) : null}
               </div>
 
-              <div style={loginStyles.fieldGroup}>
-                <label htmlFor={passwordId} style={loginStyles.fieldLabel}>
+              <div className={auth.fieldGroup}>
+                <label htmlFor={passwordId} className={auth.fieldLabel}>
                   Пароль
                 </label>
-                <div style={loginStyles.inputShell}>
+                <div className={auth.inputShell}>
                   <input
                     id={passwordId}
                     type={showPassword ? "text" : "password"}
@@ -177,24 +168,19 @@ export function LoginForm() {
                     aria-invalid={Boolean(errors.password)}
                     aria-describedby={errors.password ? `${passwordId}-error` : undefined}
                     {...passwordField}
-                    onFocus={() => setPasswordFocused(true)}
-                    onBlur={(event) => {
-                      setPasswordFocused(false);
-                      passwordField.onBlur(event);
-                    }}
-                    style={loginStyles.input({ invalid: Boolean(errors.password), focused: passwordFocused })}
+                    className={[auth.input, errors.password ? auth.inputInvalid : ""].filter(Boolean).join(" ")}
                   />
                   <button
                     type="button"
                     aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
                     onClick={() => setShowPassword((current) => !current)}
-                    style={loginStyles.toggleButton}
+                    className={auth.toggleButton}
                   >
                     {showPassword ? <EyeOffIcon /> : <EyeIcon />}
                   </button>
                 </div>
                 {errors.password?.message ? (
-                  <p id={`${passwordId}-error`} style={loginStyles.errorText}>
+                  <p id={`${passwordId}-error`} className={auth.errorText}>
                     {errors.password.message}
                   </p>
                 ) : null}
@@ -204,22 +190,22 @@ export function LoginForm() {
                 {isBusy ? "Входим…" : "Войти"}
               </Button>
 
-              <div style={loginStyles.divider} aria-hidden="true">
-                <div style={loginStyles.dividerLine} />
-                <span style={loginStyles.dividerText}>или</span>
-                <div style={loginStyles.dividerLine} />
+              <div className={auth.divider} aria-hidden="true">
+                <div className={auth.dividerLine} />
+                <span className={auth.dividerText}>или</span>
+                <div className={auth.dividerLine} />
               </div>
 
-              <Button type="button" variant="yandex" leadingIcon={<YandexMark />} onClick={startYandexSignIn}>
+              <Button variant="yandex" href={YANDEX_SIGN_IN_URL} leadingIcon={<YandexMark />}>
                 Войти с Яндекс ID
               </Button>
             </form>
           </section>
         </main>
 
-        <footer style={loginStyles.footer}>
-          <span style={loginStyles.footerMutedText}>Нет аккаунта?</span>
-          <Link href="/register" style={loginStyles.footerLink}>
+        <footer className={auth.footer}>
+          <span className={auth.footerMutedText}>Нет аккаунта?</span>
+          <Link href="/register" className={auth.footerLink}>
             Создать
           </Link>
         </footer>
@@ -227,5 +213,3 @@ export function LoginForm() {
     </div>
   );
 }
-
-
