@@ -20,7 +20,7 @@ Next.js 16.4.3 (App Router) + React 19 + TypeScript (strict). PWA for tracking f
 
 - `npm run dev` — dev server on `:3000`. It rewrites the block above on start.
 - `npm run lint` — ESLint flat config, no args (use `npx eslint <path>` to scope).
-- `npx tsc --noEmit` — the only typecheck; there is no `typecheck` script.
+- `npm run typecheck` — `tsc --noEmit`; the only typecheck.
 - `npm run build` — production build (`npm start` to serve it).
 
 There is **no test framework or test script** installed. Do not invent test commands. Run typecheck + lint before finishing. Lint is clean apart from one warning in `app/layout.tsx` (`RegisterSW` is imported but unused while the service worker is commented out) — remove the import or re-enable the component when touching that file.
@@ -64,5 +64,5 @@ There is **no test framework or test script** installed. Do not invent test comm
 
 ## Git / CI
 
-- PRs target `main`. `.github/workflows/commit-check.yml` only validates commit message, branch, and PR title — it does **not** run build, lint, typecheck, or tests, so run them locally.
+- PRs target `main`. `.github/workflows/ci.yml` runs lint, typecheck and build on PRs and on pushes to `main`; `.github/workflows/commit-check.yml` validates commit message, branch, and PR title. Neither installs a test suite — there is none.
 - Follow the existing Conventional Commits style (`feat: ...`).
