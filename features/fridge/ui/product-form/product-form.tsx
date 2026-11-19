@@ -233,6 +233,7 @@ export function ProductForm({
               data-loading={photoUploading || undefined}
             >
               {photo.url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={photo.url}
                   alt=""

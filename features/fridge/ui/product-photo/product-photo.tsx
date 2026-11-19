@@ -46,11 +46,21 @@ export function ProductPhoto({ imageKey, url, alt, className, fallback }: Produc
         return;
       }
 
-      setResolvedKey(imageKey);
-
       if (url && userId && online) {
-        await downloadPhoto(url, imageKey, userId);
+        const downloaded = await downloadPhoto(url, imageKey, userId);
+
+        if (cancelled) {
+          return;
+        }
+
+        if (downloaded) {
+          loadedKeyRef.current = imageKey;
+          setCached({ key: imageKey, url: URL.createObjectURL(downloaded) });
+          setFailedSrc(null);
+        }
       }
+
+      setResolvedKey(imageKey);
     })();
 
     return () => {
@@ -68,12 +78,13 @@ export function ProductPhoto({ imageKey, url, alt, className, fallback }: Produc
 
   const resolved = imageKey ? resolvedKey === imageKey : true;
   const cachedUrl = cached !== null && cached.key === imageKey ? cached.url : null;
-  const src = resolved ? (cachedUrl ?? url) : null;
+  const src = cachedUrl ?? (resolved ? url : null);
   const showImage = Boolean(src) && src !== failedSrc;
 
   return (
     <div className={className}>
       {showImage && src ? (
+        // eslint-disable-next-line @next/next/no-img-element
         <img src={src} alt={alt} className={styles.image} onError={() => setFailedSrc(src)} />
       ) : (
         fallback

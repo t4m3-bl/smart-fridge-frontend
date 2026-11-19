@@ -4,6 +4,8 @@ import { getDb } from "./db";
 
 const MAX_CACHED_BYTES = 3 * 1024 * 1024;
 
+const ORPHAN_MIN_AGE_MS = 15 * 60_000;
+
 let persistRequested = false;
 
 function requestPersistence() {
@@ -118,7 +120,10 @@ export async function collectOrphanPhotos(userId: string): Promise<number> {
           .map((product) => product.imageKey)
           .filter((key): key is string => Boolean(key)),
       );
-      const orphans = cached.filter((row) => !referenced.has(row.imageKey));
+      const now = Date.now();
+      const orphans = cached.filter(
+        (row) => !referenced.has(row.imageKey) && now - row.cachedAt > ORPHAN_MIN_AGE_MS,
+      );
 
       if (orphans.length > 0) {
         await db.photos.bulkDelete(orphans.map((row) => row.imageKey));

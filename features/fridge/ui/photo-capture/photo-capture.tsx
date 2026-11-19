@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/shared/ui/icon";
 import { mockRecognizedProduct } from "@/features/fridge/model/recognition-mock";
 import type { ProductFormValues } from "@/features/fridge/model/product-schema";
@@ -64,8 +64,6 @@ export function PhotoCapture(props: PhotoCaptureProps) {
   const onRecognized = props.mode === "single" ? null : props.onRecognized;
   const { onClose } = props;
   const [step, setStep] = useState<CameraStep>("front");
-  const [frontPhoto, setFrontPhoto] = useState<Blob | null>(null);
-  const [datePhoto, setDatePhoto] = useState<Blob | null>(null);
   const [cameraFailed, setCameraFailed] = useState(false);
   const [shooting, setShooting] = useState(false);
   const [resolved, setResolved] = useState(0);
@@ -107,29 +105,28 @@ export function PhotoCapture(props: PhotoCaptureProps) {
     };
   }, [capturing]);
 
-  const frontUrl = useMemo(
-    () => (frontPhoto ? URL.createObjectURL(frontPhoto) : null),
-    [frontPhoto],
-  );
-  const dateUrl = useMemo(() => (datePhoto ? URL.createObjectURL(datePhoto) : null), [datePhoto]);
+  const [frontUrl, setFrontUrl] = useState<string | null>(null);
+  const [dateUrl, setDateUrl] = useState<string | null>(null);
+  const objectUrls = useRef<string[]>([]);
 
   useEffect(
     () => () => {
-      if (frontUrl) {
-        URL.revokeObjectURL(frontUrl);
-      }
+      objectUrls.current.forEach((url) => URL.revokeObjectURL(url));
     },
-    [frontUrl],
+    [],
   );
 
-  useEffect(
-    () => () => {
-      if (dateUrl) {
-        URL.revokeObjectURL(dateUrl);
-      }
-    },
-    [dateUrl],
-  );
+  const rememberUrl = (blob: Blob | null): string | null => {
+    if (!blob) {
+      return null;
+    }
+
+    const url = URL.createObjectURL(blob);
+
+    objectUrls.current.push(url);
+
+    return url;
+  };
 
   useEffect(() => {
     if (step !== "recognizing" || !onRecognized) {
@@ -184,12 +181,12 @@ export function PhotoCapture(props: PhotoCaptureProps) {
       }
 
       if (step === "front") {
-        setFrontPhoto(photo);
+        setFrontUrl(rememberUrl(photo));
         setStep("date");
         return;
       }
 
-      setDatePhoto(photo);
+      setDateUrl(rememberUrl(photo));
       setStep("recognizing");
     } finally {
       setShooting(false);
@@ -347,6 +344,7 @@ export function PhotoCapture(props: PhotoCaptureProps) {
 
 function PhotoImage({ src }: { src: string }) {
   return (
+      // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt="" className={styles.photoImage} />
   );
 }
