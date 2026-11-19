@@ -1,0 +1,264 @@
+.screen {
+  display: flex;
+  justify-content: center;
+  min-height: 100svh;
+  background: var(--background);
+  color: var(--foreground);
+}
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.fabWrap {
+  position: sticky;
+  bottom: 24px;
+  display: flex;
+  justify-content: center;
+  padding: 0 16px;
+  margin-top: 24px;
+}
+.inner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 432px;
+  min-height: 100svh;
+  padding: 16px 16px max(16px, env(safe-area-inset-bottom));
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 36px;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.status[data-state="offline"],
+.status[data-state="pending"],
+.status[data-state="syncing"] {
+  color: var(--foreground);
+}
+
+.status[data-state="error"] {
+  color: var(--danger);
+}
+
+.status[data-state="conflict"] {
+  color: var(--accent-pressed);
+}
+
+.statusIcon {
+  flex-shrink: 0;
+  color: var(--success);
+}
+
+.status[data-state="offline"] .statusIcon,
+.status[data-state="pending"] .statusIcon {
+  color: var(--foreground);
+}
+
+.status[data-state="syncing"] .statusIcon {
+  color: var(--disabled-text);
+}
+
+.status[data-state="error"] .statusIcon {
+  color: var(--danger);
+}
+
+.status[data-state="conflict"] .statusIcon {
+  color: var(--accent-pressed);
+}
+
+.conflictBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent-tint);
+  color: var(--accent-pressed);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.conflictText {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.conflictText svg {
+  flex-shrink: 0;
+}
+
+.conflictAction {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 18px;
+  text-decoration: underline;
+}
+
+.placeholder {
+  margin: 32px 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 21px;
+  text-align: center;
+}
+
+.headerActions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+.settings {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  color: var(--disabled-text);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  background: var(--accent-tint);
+  color: var(--accent-pressed);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.title {
+  margin: 8px 0 0;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 38px;
+  letter-spacing: -0.02em;
+}
+
+.empty {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding-bottom: 64px;
+  text-align: center;
+}
+
+.emptyIcon {
+  display: grid;
+  place-items: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
+  background: var(--accent-tint);
+  color: var(--primary);
+}
+
+.emptyTitle {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 26px;
+}
+
+.emptyText {
+  max-width: 241px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 21px;
+}
+
+.empty .emptyAction {
+  width: auto;
+  margin-top: 8px;
+  padding: 0 20px;
+  gap: 8px;
+}
+
+.empty .emptyAction svg {
+  flex-shrink: 0;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+}
+
+.logout {
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 21px;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.logout:hover:not(:disabled) {
+  background: rgba(28, 29, 26, 0.04);
+}
+
+.logout:disabled {
+  color: var(--disabled-text);
+  cursor: not-allowed;
+}
+
+.logout:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media (max-width: 360px) {
+  .title {
+    font-size: 28px;
+    line-height: 34px;
+  }
+}

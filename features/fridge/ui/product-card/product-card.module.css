@@ -1,0 +1,141 @@
+﻿.card {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--foreground);
+  cursor: pointer;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.card[data-status="expired"] {
+  background: var(--disabled);
+}
+
+.placeholder {
+  position: relative;
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  overflow: hidden;
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: var(--background);
+}
+
+.card[data-status="expired"] .placeholder {
+  opacity: 0.5;
+}
+
+.placeholderLabel {
+  color: var(--disabled-text);
+  font-family: "Roboto Mono", monospace;
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 11px;
+  text-align: center;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.topRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.name {
+  margin: 0;
+  overflow: hidden;
+  color: var(--foreground);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 22px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card[data-status="expired"] .name {
+  color: var(--muted);
+}
+
+.quantity {
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 19px;
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--muted);
+}
+
+.card[data-status="fresh"] .dot {
+  background: var(--success);
+}
+
+.card[data-status="expiring"] .dot {
+  background: var(--danger);
+}
+
+.card[data-status="ending"] .dot {
+  background: var(--warning);
+}
+
+.statusLabel {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 19px;
+}
+
+.card[data-status="fresh"] .statusLabel {
+  color: var(--success);
+}
+
+.card[data-status="expiring"] .statusLabel {
+  color: var(--danger);
+}
+
+.card[data-status="ending"] .statusLabel {
+  color: var(--warning-strong);
+}
+
+.statusDetail {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 19px;
+}
+
+.openedRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 15px;
+}

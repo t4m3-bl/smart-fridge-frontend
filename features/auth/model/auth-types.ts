@@ -19,6 +19,8 @@ export type AuthStatus = "loading" | "authenticated" | "unauthenticated";
 export type AuthState = {
   status: AuthStatus;
   accessToken: string | null;
+  userId: string | null;
+  email: string | null;
   isOffline: boolean;
 };
 

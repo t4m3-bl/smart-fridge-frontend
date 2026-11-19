@@ -1,0 +1,60 @@
+.action {
+  --button-width: 217px;
+  --button-gap: 8px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.option {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--background);
+  text-align: left;
+  cursor: pointer;
+}
+
+.option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.optionIcon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--primary);
+}
+
+.optionText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.optionTitle {
+  color: var(--foreground);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.optionSubtitle {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+}

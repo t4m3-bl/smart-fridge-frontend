@@ -13,59 +13,7 @@ import auth from "@/features/auth/ui/auth.module.css";
 import styles from "@/features/auth/ui/register-form/register-form.module.css";
 import { YANDEX_SIGN_IN_URL } from "@/features/auth/api/auth-api";
 import { YandexMark } from "@/features/auth/ui/yandex-mark";
-
-function FridgeLogo() {
-  return (
-    <svg viewBox="0 0 30 30" width="30" height="30" aria-hidden="true" focusable="false">
-      <rect x="6" y="4" width="18" height="22" rx="4" fill="none" stroke="#3A6FD8" strokeWidth="2.4" />
-      <path d="M6 14h18" fill="none" stroke="#3A6FD8" strokeWidth="2.4" strokeLinecap="round" />
-      <path d="M15 17v4" fill="none" stroke="#3A6FD8" strokeWidth="2.4" strokeLinecap="round" />
-      <circle cx="19" cy="10" r="1.5" fill="#3A6FD8" />
-    </svg>
-  );
-}
-
-function ArrowLeftIcon() {
-  return (
-    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
-      <path d="M14.5 6 8.5 12l6 6" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round"
-            strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function EyeIcon() {
-  return (
-    <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false">
-      <path
-        d="M1.5 10s3.1-5.5 8.5-5.5S18.5 10 18.5 10s-3.1 5.5-8.5 5.5S1.5 10 1.5 10Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <circle cx="10" cy="10" r="2.6" fill="none" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
-  );
-}
-
-function EyeOffIcon() {
-  return (
-    <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false">
-      <path d="M3 4.5 16.5 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path
-        d="M1.5 10s3.1-5.5 8.5-5.5c1 0 1.9.1 2.7.4M18.5 10s-3.1 5.5-8.5 5.5c-1 0-1.9-.1-2.7-.4"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <circle cx="10" cy="10" r="2.6" fill="none" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
-  );
-}
+import {Icon} from "@/shared/ui/icon";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -120,14 +68,14 @@ export function RegisterForm() {
         <main className={auth.content}>
           <div className={styles.backRow}>
             <Link href="/login" className={auth.backLink}>
-              <ArrowLeftIcon />
+              <Icon name={"arrowLeft"} />
               Вход
             </Link>
           </div>
 
           <section className={auth.card} aria-labelledby="register-title">
             <div className={auth.logoBox}>
-              <FridgeLogo />
+              <Icon name="refrigerator" size={30} />
             </div>
 
             <div className={auth.titleBlock}>
@@ -184,7 +132,7 @@ export function RegisterForm() {
                     onClick={() => setShowPassword((current) => !current)}
                     className={auth.toggleButton}
                   >
-                    {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                    <Icon name={showPassword ? "eye-off" : "eye"} size={20} />
                   </button>
                 </div>
                 {errors.password?.message ? (
