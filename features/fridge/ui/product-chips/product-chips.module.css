@@ -1,0 +1,60 @@
+﻿.chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 19px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.chipActive {
+  border-color: var(--foreground);
+  background: var(--foreground);
+  color: var(--surface);
+}
+
+.chipActive .chipCount {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.dotDanger {
+  background: var(--danger);
+}
+
+.dotWarning {
+  background: var(--warning);
+}
+
+.chipCount {
+  color: var(--disabled-text);
+  font-size: 13px;
+  line-height: 17px;
+}

@@ -8,8 +8,17 @@
   --surface: #ffffff;
   --disabled: #e6e6e1;
   --disabled-text: #a3a59e;
+  --accent-tint: #e8effc;
+  --accent-pressed: #2c5bb8;
+  --success: #2fa36b;
+  --warning: #f2b01e;
+  --warning-strong: #8a5a00;
   --yandex: #fc3f1d;
-  --logo-background: #e8effc;
+  --camera-background: #0e0f0d;
+  --camera-surface: #1a1b19;
+  --camera-control: rgba(255, 255, 255, 0.14);
+  --camera-thumb: #3a3b38;
+  --logo-background: var(--accent-tint);
   --font-onest: Arial, Helvetica, sans-serif;
 }
 

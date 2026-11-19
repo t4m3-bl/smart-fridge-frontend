@@ -124,7 +124,7 @@ export function LoginForm() {
 
             <div className={auth.titleBlock}>
               <h1 id="login-title" className={auth.title}>
-                Свежо
+                Холодильник
               </h1>
             </div>
 

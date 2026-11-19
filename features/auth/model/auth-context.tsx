@@ -32,6 +32,8 @@ const OFFLINE_RETRY_MS = 30_000;
 export function AuthProvider({ children }: PropsWithChildren) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
   const [status, setStatus] = useState<AuthStatus>("loading");
   const [isOffline, setIsOffline] = useState(false);
   const refreshPromiseRef = useRef<Promise<string | null> | null>(null);
@@ -44,6 +46,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
     clearStoredSession();
     setAccessToken(null);
     setExpiresAt(null);
+    setUserId(null);
+    setEmail(null);
     setIsOffline(false);
     setStatus("unauthenticated");
   }, []);
@@ -51,7 +55,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const storeSession = useCallback((token: string, expiresIn: number) => {
     hasLocalSessionRef.current = true;
     clearPendingLogout();
-    saveStoredSession(token);
+    const session = saveStoredSession(token);
+    setUserId(session.userId);
+    setEmail(session.email);
     setAccessToken(token);
     setExpiresAt(Date.now() + expiresIn * 1000);
     setIsOffline(false);
@@ -83,6 +89,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
         const isTemporary = isNetworkError(error) || (isApiError(error) && error.status >= 500);
 
         if (isTemporary && hasLocalSessionRef.current) {
+          const storedSession = readStoredSession();
+          setUserId(storedSession?.userId ?? null);
+          setEmail(storedSession?.email ?? null);
           setIsOffline(true);
           setStatus("authenticated");
           return null;
@@ -112,7 +121,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }, [clearSession]);
 
   const bootstrap = useCallback(() => {
-    hasLocalSessionRef.current = readStoredSession() !== null;
+    const storedSession = readStoredSession();
+
+    hasLocalSessionRef.current = storedSession !== null;
 
     return (async () => {
       if (hasPendingLogout()) {
@@ -239,6 +250,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
     () => ({
       status,
       accessToken,
+      userId,
+      email,
       isOffline,
       signIn: signInAction,
       signUp: signUpAction,
@@ -249,12 +262,14 @@ export function AuthProvider({ children }: PropsWithChildren) {
     [
       accessToken,
       clearSession,
+      email,
       isOffline,
       logout,
       refreshSession,
       signInAction,
       signUpAction,
       status,
+      userId,
     ],
   );
 
